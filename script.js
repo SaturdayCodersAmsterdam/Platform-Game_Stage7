@@ -240,12 +240,10 @@ Smc.phaserEventHandlers.update.push(function() {
 });
 
 
-function bomb(whatsthis, bullet){
-    console.log(bullet);
-
+function bomb(mexican, bullet){
     mexican.health = mexican.health -10;
 
-    if  (mexican.health<=60){
+    if  (mexican.health<=0){
 
         mexican.kill();
     }
