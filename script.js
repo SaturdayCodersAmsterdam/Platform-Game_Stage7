@@ -1,6 +1,41 @@
-var cursors;
+/**
+ * The game's global configuration.
+ */
+var Smc = {
+    // The Phaser event handlers. Keys are event names, and values are arrays of functions that take no arguments.
+    phaserEventHandlers: {
+        preload: [],
+        create: [],
+        update: []
+    }
+};
+
+/**
+ * Builds a Phaser event handler for a specific event.
+ *
+ * @param {string} eventName
+ *   The name of the event to create the handler for. Must exist as a key in Smc.eventHandlers.
+ *
+ * @returns {Function}
+ *   The event handler, which takes no arguments.
+ */
+function buildPhaserEventHandler(eventName) {
+    // Phaser callbacks are functions that take no arguments. We create them dynamically using the event name that was
+    // passed on to this builder function.
+    return function() {
+        Smc.phaserEventHandlers[eventName].forEach(function (handler) {
+            handler();
+        });
+    }
+}
+
 var game = new Phaser.Game(640,480, Phaser.AUTO, 'world', {
-  preload: preload, create: create, update: update });
+    preload: buildPhaserEventHandler("preload"),
+    create: buildPhaserEventHandler("create"),
+    update: buildPhaserEventHandler("update")
+});
+
+var cursors;
 
 var mexicanX = 200;
 var mexicanY= 100;
@@ -27,7 +62,7 @@ var dirY = 10;
 var emitter;
 var weapon;
 
-function preload() {
+Smc.phaserEventHandlers.preload.push(function() {
     game.load.image('arm', 'assets/arm.png');
     game.load.image('pump', 'assets/pump.png');
     game.load.image('weight', 'assets/weight.png');
@@ -48,11 +83,9 @@ function preload() {
 
     game.load.image('pixel', 'assets/trans-pixel.png');
     game.load.script('HudManager', 'plugins/HUDManager.js');
-}
+});
 
-
-function create() {
-
+Smc.phaserEventHandlers.create.push(function() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.stage.backgroundColor = '#333';
     game.add.tileSprite(-400,-400, 2000, 1600, 'background');
@@ -143,20 +176,14 @@ function create() {
     //  With no offsets from the position
     //  But the 'true' argument tells the weapon to track sprite rotation
     weapon.trackSprite(studentWeaponMount, 0, 0, true);
+});
 
-}
-
-function update () {
-
+Smc.phaserEventHandlers.update.push(function() {
     game.physics.arcade.collide(mexican, box, yahoo);
     game.physics.arcade.collide(mexican, weapon.bullets, bomb, null, this);
 
-
-
     game.physics.arcade.collide(student, box, yahoo);
     game.physics.arcade.collide(student, lift, yahoo);
-
-
 
     if (x > game.width - student.width || x < 0) {
         dirX = -dirX;
@@ -210,9 +237,7 @@ function update () {
 
     studentWeaponMount.y =   student.y;
     studentWeaponMount.x =   student.x;
-
-
-}
+});
 
 
 function bomb(whatsthis, bullet){
