@@ -13,6 +13,13 @@ var student;
 var studentWeaponMount;
 var mexican;
 
+var armX = 46;
+var armY= 93;
+var pumpX = 62;
+var pumpY= 168;
+var weightX = 0;
+var weightY= 345;
+
 var x = game.width/2;
 var y = game.height/2;
 var dirX = 10;
@@ -21,15 +28,16 @@ var emitter;
 var weapon;
 
 function preload() {
+    game.load.image('arm', 'assets/arm.png');
+    game.load.image('pump', 'assets/pump.png');
+    game.load.image('weight', 'assets/weight.png');
+
     game.load.image('fire1', 'assets/fire1.png');
     game.load.image('fire2', 'assets/fire2.png');
     game.load.image('fire3', 'assets/fire3.png');
     game.load.image('smoke', 'assets/smoke-puff.png');
 
-
     game.load.image('pixel', 'assets/trans-pixel.png');
-
-
 
     game.load.image('bullet', 'assets/bullet.png');
     game.load.image('box', 'assets/box.png');
@@ -75,6 +83,11 @@ function create() {
     mexican = game.add.sprite( mexicanX, mexicanY, 'mexican');
     box = game.add.sprite( boxX, boxY, 'box');
     lift = game.add.sprite( liftX, liftY, 'lift');
+
+
+    pump = game.add.sprite( pumpX, pumpY, 'pump');
+    arm = game.add.sprite( armX, armY, 'arm');
+    weight = game.add.sprite( weightX, weightY, 'weight');
 
     mexican.animations.add('stop');
     mexican.animations.play('stop', 5, true);
